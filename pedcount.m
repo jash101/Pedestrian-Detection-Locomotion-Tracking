@@ -1,0 +1,227 @@
+function varargout = pedcount(varargin)
+% PEDCOUNT MATLAB code for pedcount.fig
+%      PEDCOUNT, by itself, creates a new PEDCOUNT or raises the existing
+%      singleton*.
+%
+%      H = PEDCOUNT returns the handle to a new PEDCOUNT or the handle to
+%      the existing singleton*.
+%
+%      PEDCOUNT('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in PEDCOUNT.M with the given input arguments.
+%
+%      PEDCOUNT('Property','Value',...) creates a new PEDCOUNT or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before pedcount_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to pedcount_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help pedcount
+
+% Last Modified by GUIDE v2.5 23-Apr-2017 18:01:51
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @pedcount_OpeningFcn, ...
+                   'gui_OutputFcn',  @pedcount_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before pedcount is made visible.
+function pedcount_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to pedcount (see VARARGIN)
+
+% Choose default command line output for pedcount
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% UIWAIT makes pedcount wait for user response (see UIRESUME)
+% uiwait(handles.figure1);
+clear all;
+delete(instrfind({'Port'},{'COM3'}));
+global a;
+a = arduino;  
+
+%Default Panel colors
+PushAndRadioButtons = findall(gcf,'Style','Pushbutton');
+% Change to red all these buttons
+set(PushAndRadioButtons,'Backgroundcolor', [1 1 1]);
+% % Set to green the current button
+% set(handles.on,'Backgroundcolor', [1 1 1]);
+%set(handles.off, 'Backgroundcolor', [1 1 1]);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = pedcount_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+% --- Executes on button press in panel5.
+function panel5_Callback(hObject, eventdata, handles)
+% hObject    handle to panel5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in panel2.
+function panel2_Callback(hObject, eventdata, handles)
+% hObject    handle to panel2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in panel3.
+function panel3_Callback(hObject, eventdata, handles)
+% hObject    handle to panel3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in panel0.
+function panel0_Callback(hObject, eventdata, handles)
+% hObject    handle to panel0 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in panel1.
+function panel1_Callback(hObject, eventdata, handles)
+% hObject    handle to panel1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+panel1details();
+
+% --- Executes on button press in on.
+function on_Callback(hObject, eventdata, handles)
+% hObject    handle to on (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% Get the handles of all pushbuttons and radiobuttons
+PushAndRadioButtons = findall(gcf,'Style','Pushbutton');
+set(PushAndRadioButtons,'Backgroundcolor', [0 0 0]);
+pause(0.25);
+set(PushAndRadioButtons,'Backgroundcolor', [1 1 1]);
+pause(0.25);
+set(PushAndRadioButtons,'Backgroundcolor', [0 0 0]);
+pause(0.25);
+set(PushAndRadioButtons,'Backgroundcolor', [0 0.537 1]);
+set(handles.on,'Backgroundcolor', [1 1 1]);
+set(handles.off, 'Backgroundcolor', [1 1 1]);
+set(handles.countdisplay, 'String', 'Starting...');
+
+global a;
+%pname = ['panel0' 'panel1' 'panel2' 'panel3' 'panel4' 'panel5'];
+panel = {'A0' 'A1' 'A2' 'A3' 'A4' 'A5'}; %panels
+pr = zeros(1, 6); %panel readings
+count = zeros(1, 6); % Counts
+flag = zeros(1, 6);%flags to identify one force signal
+lowrange = 3.2;%3.9
+highrange = 5;
+stable = 0.25;
+totalcount = 0;
+set(handles.countdisplay, 'String', 'On');
+pause(1);
+
+%for k = 1:100
+for j = 1:1000
+for i = 1:6
+   pr(i) = 5 - readVoltage(a, panel{i}); 
+   if pr(i) < stable
+       flag(i) = 0;
+   end
+   
+   if (pr(i) > lowrange & pr(i) <= highrange & flag(i) == 0)
+       count(i) = count(i) + 1;
+       flag(i) = 1;
+   end
+   pause(0.001);
+   switch i
+       case 1
+           set(handles.panel0, 'String', count(i));
+       case 2
+           set(handles.panel1, 'String', count(i));
+       case 3
+           set(handles.panel2, 'String', count(i));
+       case 4
+           set(handles.panel3, 'String', count(i));
+       case 5
+           set(handles.panel4, 'String', count(i));
+       case 6
+           set(handles.panel5, 'String', count(i));
+   end
+   totalcount = count(1) + count(2);
+   set(handles.countdisplay, 'String', totalcount);
+end
+end
+%end
+
+% while(1)
+%     
+%     
+% end
+
+
+% --- Executes on button press in off.
+function off_Callback(hObject, eventdata, handles)
+% hObject    handle to off (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+closereq;
+
+
+% --- Executes on button press in panel4.
+function panel4_Callback(hObject, eventdata, handles)
+% hObject    handle to panel4 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+
+function countdisplay_Callback(hObject, eventdata, handles)
+% hObject    handle to countdisplay (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of countdisplay as text
+%        str2double(get(hObject,'String')) returns contents of countdisplay as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function countdisplay_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to countdisplay (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
