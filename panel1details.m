@@ -64,14 +64,19 @@ guidata(hObject, handles);
 % end
 global k a
 x=0;
-
-for k=1:1:300
-    b= 5 - readVoltage(a, 'A0');
-    x=[x,b];
-    plot(x,'LineWidth',2); grid on;
-    axis([0, 300, 0, 5]);
-    pause(0.001);
-end
+j = 1:1:1000;
+pgraph=csvread('pgraph.dat');
+count = csvread('count.dat');
+set(handles.text, 'String', count(2));
+plot(j, pgraph(2,:));
+axis([0 1000 0 5]);
+% for k=1:1:300
+%     b= 5 - readVoltage(a, 'A0');
+%     x=[x,b];
+%     plot(x,'LineWidth',2); grid on;
+%     axis([0, 300, 0, 5]);
+%     pause(0.001);
+% end
 
 % UIWAIT makes panel1details wait for user response (see UIRESUME)
 % uiwait(handles.figure1);

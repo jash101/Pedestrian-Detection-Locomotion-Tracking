@@ -89,28 +89,28 @@ function panel5_Callback(hObject, eventdata, handles)
 % hObject    handle to panel5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+panel5details();
 
 % --- Executes on button press in panel2.
 function panel2_Callback(hObject, eventdata, handles)
 % hObject    handle to panel2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+panel2details();
 
 % --- Executes on button press in panel3.
 function panel3_Callback(hObject, eventdata, handles)
 % hObject    handle to panel3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+panel3details();
 
 % --- Executes on button press in panel0.
 function panel0_Callback(hObject, eventdata, handles)
 % hObject    handle to panel0 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+panel0details();
 
 % --- Executes on button press in panel1.
 function panel1_Callback(hObject, eventdata, handles)
@@ -125,6 +125,7 @@ function on_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % Get the handles of all pushbuttons and radiobuttons
+set(handles.on, 'String', 'On');
 PushAndRadioButtons = findall(gcf,'Style','Pushbutton');
 set(PushAndRadioButtons,'Backgroundcolor', [0 0 0]);
 pause(0.25);
@@ -140,6 +141,7 @@ set(handles.countdisplay, 'String', 'Starting...');
 global a;
 %pname = ['panel0' 'panel1' 'panel2' 'panel3' 'panel4' 'panel5'];
 panel = {'A0' 'A1' 'A2' 'A3' 'A4' 'A5'}; %panels
+pgraph = zeros(6, 1000);
 pr = zeros(1, 6); %panel readings
 count = zeros(1, 6); % Counts
 flag = zeros(1, 6);%flags to identify one force signal
@@ -154,6 +156,7 @@ pause(1);
 for j = 1:1000
 for i = 1:6
    pr(i) = 5 - readVoltage(a, panel{i}); 
+   pgraph(i, j) = pr(i);
    if pr(i) < stable
        flag(i) = 0;
    end
@@ -163,24 +166,45 @@ for i = 1:6
        flag(i) = 1;
    end
    pause(0.001);
+   r = 0 + 0.02*count(i);
+   g = 0.537 - 0.012*count(i);
+   b = 1 - 0.07*count(i);
+   if (r > 1)
+       r = 1;
+   end
+   if (g<0)
+       g = 0;
+   end
+   if (b<0)
+       b = 0;
+   end
    switch i
        case 1
            set(handles.panel0, 'String', count(i));
+           set(handles.panel0, 'BackgroundColor', [r g b]);
        case 2
            set(handles.panel1, 'String', count(i));
+           set(handles.panel1, 'BackgroundColor', [r g b]);
        case 3
            set(handles.panel2, 'String', count(i));
+           set(handles.panel2, 'BackgroundColor', [r g b]);
        case 4
            set(handles.panel3, 'String', count(i));
+           set(handles.panel3, 'BackgroundColor', [r g b]);
        case 5
            set(handles.panel4, 'String', count(i));
+           set(handles.panel4, 'BackgroundColor', [r g b]);
        case 6
            set(handles.panel5, 'String', count(i));
+           set(handles.panel5, 'BackgroundColor', [r g b]);
    end
    totalcount = count(1) + count(2);
    set(handles.countdisplay, 'String', totalcount);
 end
 end
+csvwrite('pgraph.dat', pgraph);
+csvwrite('count.dat', count);
+set(handles.on, 'String', 'Reset');
 %end
 
 % while(1)
@@ -202,7 +226,7 @@ function panel4_Callback(hObject, eventdata, handles)
 % hObject    handle to panel4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+panel4details();
 
 
 function countdisplay_Callback(hObject, eventdata, handles)

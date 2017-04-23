@@ -66,6 +66,8 @@ global k a
 x=0;
 j = 1:1:1000;
 pgraph=csvread('pgraph.dat');
+count = csvread('count.dat');
+set(handles.text, 'String', count(4));
 plot(j, pgraph(4,:));
 axis([0 1000 0 5]);
 % for k=1:1:300

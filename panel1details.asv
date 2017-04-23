@@ -22,7 +22,7 @@ function varargout = panel1details(varargin)
 
 % Edit the above text to modify the response to help panel1details
 
-% Last Modified by GUIDE v2.5 23-Apr-2017 13:21:15
+% Last Modified by GUIDE v2.5 23-Apr-2017 17:26:32
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -62,17 +62,21 @@ guidata(hObject, handles);
 % if strcmp(get(hObject,'Visible'),'off')
 %     plot(rand(5));
 % end
-clear all;
-a 
 global k a
 x=0;
-
-for k=1:1:1000
-    b=readVoltage(a, 'A0');
-    x=[x,b];
-    plot(x,'LineWidth',2); grid on;
-    pause(0.01);
-end
+j = 1:1:1000;
+pgraph=csvread('pgraph.dat');
+count = csvread('count.dat');
+set(handles.text, 'String', count);
+plot(j, pgraph(2,:));
+axis([0 1000 0 5]);
+% for k=1:1:300
+%     b= 5 - readVoltage(a, 'A0');
+%     x=[x,b];
+%     plot(x,'LineWidth',2); grid on;
+%     axis([0, 300, 0, 5]);
+%     pause(0.001);
+% end
 
 % UIWAIT makes panel1details wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -196,3 +200,11 @@ function text_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in back.
+function back_Callback(hObject, eventdata, handles)
+% hObject    handle to back (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+closereq;

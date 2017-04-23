@@ -132,7 +132,7 @@ set(PushAndRadioButtons,'Backgroundcolor', [1 1 1]);
 pause(0.25);
 set(PushAndRadioButtons,'Backgroundcolor', [0 0 0]);
 pause(0.25);
-set(PushAndRadioButtons,'Backgroundcolor', [0.5 0.9 0.15]);
+set(PushAndRadioButtons,'Backgroundcolor', [0 0.537 1]);
 set(handles.on,'Backgroundcolor', [1 1 1]);
 set(handles.off, 'Backgroundcolor', [1 1 1]);
 set(handles.countdisplay, 'String', 'Starting...');
@@ -143,7 +143,7 @@ panel = {'A0' 'A1' 'A2' 'A3' 'A4' 'A5'}; %panels
 pr = zeros(1, 6); %panel readings
 count = zeros(1, 6); % Counts
 flag = zeros(1, 6);%flags to identify one force signal
-lowrange = 3.9;
+lowrange = 3.2;%3.9
 highrange = 5;
 stable = 0.25;
 totalcount = 0;
@@ -151,7 +151,7 @@ set(handles.countdisplay, 'String', 'On');
 pause(1);
 
 %for k = 1:100
-for j = 1:100
+for j = 1:1000
 for i = 1:6
    pr(i) = 5 - readVoltage(a, panel{i}); 
    if pr(i) < stable
@@ -162,20 +162,38 @@ for i = 1:6
        count(i) = count(i) + 1;
        flag(i) = 1;
    end
-   pause(0.017);
+   pause(0.001);
+   r = 0 + 0.01*count(i);
+   g = 0.537 - 0.006*count(i);
+   b = 1 - 0.01*count(i);
+   if (r > 1)
+       r = 1;
+   end
+   if (g<0)
+       g = 0;
+   end
+   if (b<0)
+       b = 0;
+   end
    switch i
        case 1
            set(handles.panel0, 'String', count(i));
+           set(handles.panel0, 'BackgroundColor', [r g b]);
        case 2
            set(handles.panel1, 'String', count(i));
+           set(handles.panel0, 'BackgroundColor', [r g b]);
        case 3
            set(handles.panel2, 'String', count(i));
+           set(handles.panel0, 'BackgroundColor', [r g b]);
        case 4
            set(handles.panel3, 'String', count(i));
+           set(handles.panel0, 'BackgroundColor', [r g b]);
        case 5
            set(handles.panel4, 'String', count(i));
+           set(handles.panel4, 'BackgroundColor', [r g b]);
        case 6
            set(handles.panel5, 'String', count(i));
+           set(handles.panel5, 'BackgroundColor', [r g b]);
    end
    totalcount = count(1) + count(2);
    set(handles.countdisplay, 'String', totalcount);
