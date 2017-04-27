@@ -11,6 +11,6 @@ A repository for _MATLAB GUI_ application to interface with Arduino (Uno) using 
 5. Clicking the panels leads to opening a new window which displays __Time vs Weight plot__ and individual panel counts for the complete run time, using the CSV files.  
 
 ## Contact:
-In case you have any query or suggestions, find me here:
-Email: [jashmota101@gmail.com](mailto:jashmota101@gmail.com)
+In case you have any query or suggestions, find me here:    
+Email: [jashmota101@gmail.com](mailto:jashmota101@gmail.com)  
 Twitter: [@TheJashMota](https:www/twitter.com/TheJashMota)
