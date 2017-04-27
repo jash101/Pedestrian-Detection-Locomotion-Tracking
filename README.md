@@ -12,5 +12,5 @@ A repository for _MATLAB GUI_ application to interface with Arduino (Uno) using 
 
 ## Contact:
 In case you have any query or suggestions, find me here:
-Email: [jashmota101@gmail.com] (mailto:jashmota101@gmail.com)
-Twitter: [@TheJashMota] (https:www/twitter.com/TheJashMota)
+Email: [jashmota101@gmail.com](mailto:jashmota101@gmail.com)
+Twitter: [@TheJashMota](https:www/twitter.com/TheJashMota)
